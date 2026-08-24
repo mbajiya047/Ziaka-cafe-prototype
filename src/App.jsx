@@ -10,24 +10,26 @@ import { CheckoutModal } from './components/CheckoutModal';
 import { LiveOrderTracker } from './components/LiveOrderTracker';
 import { OrderReceiptModal } from './components/OrderReceiptModal';
 import { TableReservationModal } from './components/TableReservationModal';
+import { AcademicOverviewModal } from './components/AcademicOverviewModal';
 import { AdminDashboard } from './components/AdminDashboard';
 import {
   Coffee,
-  Heart,
   MapPin,
   Clock,
   Phone,
   Mail,
   Globe,
   Share2,
-  Award,
-  Sparkles,
-  ShieldCheck,
   GraduationCap
 } from 'lucide-react';
 
 const MainContent = () => {
-  const { isAdminView, setIsReservationOpen, setSelectedCategory } = useApp();
+  const {
+    isAdminView,
+    setIsReservationOpen,
+    setSelectedCategory,
+    setIsAcademicModalOpen
+  } = useApp();
 
   if (isAdminView) {
     return (
@@ -35,38 +37,33 @@ const MainContent = () => {
         <Navbar />
         <AdminDashboard />
         <OrderReceiptModal />
+        <AcademicOverviewModal />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-stone-950 text-stone-100 flex flex-col justify-between selection:bg-amber-500 selection:text-stone-950">
-      
-      {/* Top Navbar */}
       <Navbar />
 
-      {/* Main Experience */}
       <main className="flex-1">
         <HeroBanner />
         <CategoryNav />
         <MenuGrid />
       </main>
 
-      {/* Interactive Floating Modals & Drawers */}
       <ItemCustomizerModal />
       <CartDrawer />
       <CheckoutModal />
       <LiveOrderTracker />
       <OrderReceiptModal />
       <TableReservationModal />
+      <AcademicOverviewModal />
 
-      {/* Luxury Cafe Footer */}
       <footer className="bg-stone-900/90 border-t border-stone-800 text-stone-400 text-xs mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
             
-            {/* Col 1: Brand Info */}
             <div className="space-y-4">
               <div className="flex items-center space-x-2.5">
                 <div className="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-stone-950 font-black">
@@ -90,7 +87,6 @@ const MainContent = () => {
               </div>
             </div>
 
-            {/* Col 2: Quick Links */}
             <div className="space-y-3">
               <h4 className="font-bold text-white text-xs uppercase tracking-wider">Explore Menu</h4>
               <ul className="space-y-2 text-stone-400 text-xs">
@@ -122,7 +118,6 @@ const MainContent = () => {
               </ul>
             </div>
 
-            {/* Col 3: Hours & Location */}
             <div className="space-y-3">
               <h4 className="font-bold text-white text-xs uppercase tracking-wider">Visit & Contact</h4>
               <ul className="space-y-2.5 text-xs text-stone-400">
@@ -145,11 +140,17 @@ const MainContent = () => {
               </ul>
             </div>
 
-            {/* Col 4: Academic Capstone Badge */}
-            <div className="p-4 rounded-2xl bg-stone-950 border border-stone-800 space-y-2.5">
-              <div className="flex items-center space-x-2 text-amber-400">
-                <GraduationCap className="w-5 h-5" />
-                <span className="font-bold text-xs uppercase tracking-wider">Academic Project</span>
+            <div
+              onClick={() => setIsAcademicModalOpen(true)}
+              className="p-4 rounded-2xl bg-stone-950 border border-stone-800 space-y-2.5 cursor-pointer hover:border-amber-500/50 transition group shadow-md"
+              title="Click to view full Academic Project Dossier"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 text-amber-400">
+                  <GraduationCap className="w-5 h-5 group-hover:scale-110 transition" />
+                  <span className="font-bold text-xs uppercase tracking-wider">Academic Project</span>
+                </div>
+                <span className="text-[10px] text-amber-400/80 font-bold group-hover:underline">View Specs ➔</span>
               </div>
               <p className="text-[11px] text-stone-300 font-medium">
                 Bachelor of Computer Applications (BCA) Final Capstone Project
@@ -170,15 +171,13 @@ const MainContent = () => {
                 Table Reservations
               </button>
               <span>•</span>
-              <a href="#terms" className="hover:text-amber-400">Terms & Conditions</a>
-              <span>•</span>
-              <a href="#privacy" className="hover:text-amber-400">Privacy Policy</a>
+              <button onClick={() => setIsAcademicModalOpen(true)} className="hover:text-amber-400">
+                Project Specs
+              </button>
             </div>
           </div>
-
         </div>
       </footer>
-
     </div>
   );
 };
