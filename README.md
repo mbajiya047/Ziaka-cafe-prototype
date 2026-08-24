@@ -1,16 +1,73 @@
-# React + Vite
+# ☕ Zaika Café – Next-Gen Online Food & Coffee Ordering
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+<p align="center">
+  <strong>A modern, interactive café ordering experience built with React and Vite.</strong>
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  🌐 <a href="https://ziaka-cafe-prototype.onrender.com">Live Demo</a> •
+  📂 <a href="https://github.com/mbajiya047/Ziaka-cafe-prototype">GitHub Repository</a>
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 📌 About the Project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Zaika Café** is a modern web-based café ordering prototype designed to provide customers with a smooth, attractive, and interactive food and beverage ordering experience.
 
-## Expanding the Oxlint configuration
+The project focuses on creating a premium café interface with modern UI design, responsive layouts, menu browsing, interactive elements, and a user-friendly ordering experience.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+The application is built as a frontend web application using **React.js and Vite**.
+
+## ✨ Features
+
+- ☕ Modern café-themed user interface
+- 🍔 Interactive food and beverage menu
+- 🛒 Online ordering interface
+- 📱 Responsive design
+- 🎨 Premium modern UI/UX
+- ⚡ Fast Vite-powered development
+- 🧩 Reusable React components
+- 🎉 Interactive animations and effects
+- 🖥️ Desktop and mobile friendly
+- 🌐 Render deployment
+- 🔥 Tailwind CSS styling
+- 🎯 Lucide icons
+
+## 🛠️ Tech Stack
+
+### Frontend
+- React.js
+- JavaScript / JSX
+- Vite
+- Tailwind CSS
+- Lucide React
+- Canvas Confetti
+
+### Development Tools
+- Node.js
+- npm
+- Git
+- GitHub
+- VS Code
+
+### Deployment
+- Render
+
+## 📂 Project Structure
+
+```text
+Ziaka-cafe-prototype/
+│
+├── public/
+├── src/
+│   ├── components/
+│   ├── assets/
+│   ├── App.jsx
+│   └── main.jsx
+│
+├── index.html
+├── package.json
+├── vite.config.js
+├── README.md
+└── package-lock.json
