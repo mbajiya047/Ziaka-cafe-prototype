@@ -1,4 +1,3 @@
-````markdown
 # ☕ Zaika Café – Next-Gen Online Food & Coffee Ordering
 
 <p align="center">
@@ -72,7 +71,6 @@ Ziaka-cafe-prototype/
 ├── vite.config.js
 ├── README.md
 └── package-lock.json
-````
 
 ## 🚀 Live Demo
 
