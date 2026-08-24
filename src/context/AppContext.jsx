@@ -7,70 +7,59 @@ import { sound } from '../utils/audio';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  // 1. Menu Items State (persisted in localStorage)
   const [menuItems, setMenuItems] = useState(() => {
     const saved = localStorage.getItem('zaika_menu');
     return saved ? JSON.parse(saved) : INITIAL_MENU_ITEMS;
   });
 
-  // 2. Orders State
   const [orders, setOrders] = useState(() => {
     const saved = localStorage.getItem('zaika_orders');
     return saved ? JSON.parse(saved) : INITIAL_ORDERS;
   });
 
-  // 3. Table Reservations
   const [reservations, setReservations] = useState(() => {
     const saved = localStorage.getItem('zaika_reservations');
     return saved ? JSON.parse(saved) : INITIAL_RESERVATIONS;
   });
 
-  // 4. Cart State
   const [cart, setCart] = useState(() => {
     const saved = localStorage.getItem('zaika_cart');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // 5. User & Loyalty Rewards
   const [user, setUser] = useState({
     name: 'Kashish',
     email: 'kashish@srmuniversity.ac.in',
     phone: '+91 98765 43210',
-    coins: 150, // 150 Zaika Coins = ₹150 discount
+    coins: 150,
     addresses: [
       { id: 'addr1', label: 'Home', address: 'B-204, Green Meadows, Sector 15, Sonepat', isDefault: true },
       { id: 'addr2', label: 'University', address: 'SRM University Campus, Rajiv Gandhi Education City, Sonepat', isDefault: false }
     ]
   });
 
-  // 6. Navigation & Modals State
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterDiet, setFilterDiet] = useState('all'); // 'all' | 'veg' | 'non-veg' | 'spicy'
-  const [sortBy, setSortBy] = useState('popular'); // 'popular' | 'rating' | 'price-asc' | 'price-desc'
-
-  const [orderMode, setOrderMode] = useState('delivery'); // 'delivery' | 'pickup' | 'dinein'
+  const [filterDiet, setFilterDiet] = useState('all');
+  const [sortBy, setSortBy] = useState('popular');
+  const [orderMode, setOrderMode] = useState('delivery');
   const [tableNumber, setTableNumber] = useState('Table 4');
 
-  // Modals
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isReservationOpen, setIsReservationOpen] = useState(false);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [isAcademicModalOpen, setIsAcademicModalOpen] = useState(false);
   const [receiptOrder, setReceiptOrder] = useState(null);
   const [customizingItem, setCustomizingItem] = useState(null);
   const [activeTrackingOrderId, setActiveTrackingOrderId] = useState(null);
   const [isTrackerOpen, setIsTrackerOpen] = useState(false);
-
-  // Admin View Switch
   const [isAdminView, setIsAdminView] = useState(false);
 
-  // Applied Coupon & Coin Discount in Cart
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [useCoins, setUseCoins] = useState(false);
   const [deliveryTip, setDeliveryTip] = useState(30);
 
-  // Sync to localStorage
   useEffect(() => {
     localStorage.setItem('zaika_menu', JSON.stringify(menuItems));
   }, [menuItems]);
@@ -87,7 +76,6 @@ export const AppProvider = ({ children }) => {
     localStorage.setItem('zaika_cart', JSON.stringify(cart));
   }, [cart]);
 
-  // Cart Operations
   const addToCart = (item, options = {}) => {
     sound.playAddToCart();
     const size = options.size || (item.sizes ? item.sizes[0].name : null);
@@ -122,7 +110,7 @@ export const AppProvider = ({ children }) => {
             isVeg: item.isVeg,
             selectedSize: size,
             selectedAddOns: addOns,
-            instructions: instructions,
+            instructions,
             quantity: 1
           }
         ];
@@ -154,11 +142,9 @@ export const AppProvider = ({ children }) => {
     setUseCoins(false);
   };
 
-  // Cart Calculations
   const cartSubtotal = cart.reduce((acc, item) => acc + item.unitPrice * item.quantity, 0);
   const totalCartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Calculate discount
   let couponDiscount = 0;
   if (appliedCoupon && cartSubtotal >= (appliedCoupon.minOrder || 0)) {
     if (appliedCoupon.discountType === 'percentage') {
@@ -174,14 +160,13 @@ export const AppProvider = ({ children }) => {
   const deliveryFee = appliedCoupon?.discountType === 'free_delivery' ? 0 : baseDeliveryFee;
   const packagingFee = orderMode === 'delivery' ? 20 : (orderMode === 'pickup' ? 10 : 0);
   const gst = parseFloat(((cartSubtotal - couponDiscount) * 0.05).toFixed(2));
-  const coinsDiscount = useCoins ? Math.min(user.coins, Math.floor(cartSubtotal * 0.2)) : 0; // max 20% by coins
+  const coinsDiscount = useCoins ? Math.min(user.coins, Math.floor(cartSubtotal * 0.2)) : 0;
 
   const grandTotal = Math.max(
     0,
     parseFloat((cartSubtotal - couponDiscount - coinsDiscount + deliveryFee + packagingFee + (orderMode === 'delivery' ? deliveryTip : 0) + gst).toFixed(2))
   );
 
-  // Place Order
   const placeOrder = (orderDetails) => {
     sound.playOrderSuccess();
     const newOrderId = `ZK-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -208,7 +193,7 @@ export const AppProvider = ({ children }) => {
       },
       paymentMethod: orderDetails.paymentMethod || 'UPI (Google Pay)',
       paymentStatus: 'Paid',
-      orderStatus: 'received', // 'received' -> 'in_kitchen' -> 'out_for_delivery' -> 'delivered'
+      orderStatus: 'received',
       estimatedTime: orderMode === 'dinein' ? '15 mins' : '25-30 mins',
       rider: orderMode === 'delivery' ? {
         name: 'Vikram Choudhary',
@@ -218,7 +203,6 @@ export const AppProvider = ({ children }) => {
       } : null
     };
 
-    // Update user coins (earn 5% coins)
     const earnedCoins = Math.floor(grandTotal * 0.05);
     setUser(prev => ({
       ...prev,
@@ -233,7 +217,6 @@ export const AppProvider = ({ children }) => {
     return newOrder;
   };
 
-  // Admin Order Status Update
   const updateOrderStatus = (orderId, newStatus) => {
     setOrders(prev =>
       prev.map(ord => {
@@ -249,7 +232,6 @@ export const AppProvider = ({ children }) => {
     );
   };
 
-  // Menu Management (Admin CRUD)
   const addMenuItem = (newItem) => {
     const item = {
       ...newItem,
@@ -271,7 +253,6 @@ export const AppProvider = ({ children }) => {
     setMenuItems(prev => prev.filter(item => item.id !== itemId));
   };
 
-  // Table Booking
   const addReservation = (booking) => {
     const res = {
       ...booking,
@@ -339,6 +320,8 @@ export const AppProvider = ({ children }) => {
         setIsReservationOpen,
         isReceiptOpen,
         setIsReceiptOpen,
+        isAcademicModalOpen,
+        setIsAcademicModalOpen,
         receiptOrder,
         setReceiptOrder,
         customizingItem,
